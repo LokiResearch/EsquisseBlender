@@ -20,25 +20,31 @@ We need to build a wrapper to call specific functions in python.
 Esquisse uses [svg.path](https://pypi.org/project/svg.path/) to export SVG files.
 #### Getting svg.path
 * Install svg.path using pip
-#### Installing Polygon3 into Esquisse
-* Copy **parser.py** and **path.py** into the folder **/code/Esquisse/svg**.
-
+#### Installing svg.path into Esquisse
+* The module downloaded should be located in your python installation folder (probably /usr/local/lib/python3.X)
+* Open the the directory **site-packages**
+* Copy **/svg/path/parser.py** and **svg/path/path.py** into the folder **/code/Esquisse/svg**.
 
 
 ### 1.3] Polygon3
 Esquisse uses [Polygon3](https://pypi.org/project/Polygon3/) to export SVG files.
-#### Getting Polygon3
+#### Getting Polygon
 * Install Polygon3 using pip
-**Warning:** Be carefull to match the python version of Polygon3 and the python version of Blender
+**Warning:** Be carefull to match the python version of Polygon3 and the python version of Blender because we are using
+a dynamic library.
 #### Installing Polygon3 into Esquisse
-* Copy **Polygon.so, Utils.py** and **__init__.py**  into the folder **code/Esquisse/Polygon**.
+* The module downloaded should be located in your python installation folder (probably /usr/local/lib/python3.X)
+* Open the the directory **site-packages**
+* Copy **Polygon/Polygon.so, Polygon/Utils.py** and **Polygon/__init__.py**  into the folder **code/Esquisse/Polygon**.
 
 
 ### 1.4] OpenCV
 Esquisses uses [OpenCV](https://pypi.org/project/pyopencv/) to manipulate images.
 #### Getting OpenCV
-* Install pyopencv using pip
+* Install opencv-python using pip
 #### Installing Polygon3 into Esquisse
+* The module downloaded should be located in your python installation folder (probably /usr/local/lib/python3.X)
+* Open the the directory **site-packages**
 * Copy the content of folder **cv2**  from the pip installation into the folder **/code/Esquisse/cv2**.
 
 
