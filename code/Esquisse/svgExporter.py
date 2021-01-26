@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 import os
 from bpy_extras import view3d_utils
@@ -382,7 +393,6 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
-
 
 
 

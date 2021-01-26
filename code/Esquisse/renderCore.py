@@ -1,10 +1,21 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 from . import renderData
 from .meshObject import MeshObject
 from .objectHandler import ObjectHandler
 from .svgExporter import SVGExporter
 from .occlusionHandler import OcclusionHandler
 from Esquisse.cgal.mycgal import *
-from  Esquisse.Polygon.cPolygon import *
+from  Esquisse.Polygon.Utils import *
 from bgl import *
 import time
 import blf
@@ -14,7 +25,7 @@ import os
 import random
 from mathutils import Matrix
 from mathutils import Vector
-
+import bmesh
 
 class RenderCore():
 

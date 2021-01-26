@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 
 from bpy.props import StringProperty, BoolProperty, IntProperty, FloatProperty, EnumProperty, PointerProperty
@@ -24,8 +35,10 @@ class EsquissePanel(bpy.types.Panel):
 		self.draw_objects_color_panel(context)
 		self.draw_SVG_settings_panel(context)
 		self.draw_camera_panel(context)
+		self.draw_collisions_panel(context)
 		self.draw_render_panel(context)
 		self.draw_ghost_panel(context)
+		self.draw_gesture_panel(context)
 
 
 	def draw_library_panel(self, context):
@@ -41,7 +54,7 @@ class EsquissePanel(bpy.types.Panel):
 			row = library_box.row(True)
 			row.prop(self.esquisse, 'esquisse_library_path' , text="Esquisse Folder path")
 
-			if (self.esquisse.esquisse_library_path.endswith('Esquisse_library') or 
+			if (self.esquisse.esquisse_library_path.endswith('Esquisse_library') or
 				self.esquisse.esquisse_library_path.endswith('Esquisse_library/')):
 				row = library_box.row(True)
 				col = row.column(True)
@@ -60,7 +73,7 @@ class EsquissePanel(bpy.types.Panel):
 		header_row.alignment = 'LEFT'
 		header_row.prop(self.panelProperties, "expand_screens_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_screens_panel else "RIGHTARROW", icon_only=True, emboss=False)
 		header_row.prop(self.panelProperties, "expand_screens_panel", icon="FACESEL_HLT", text="Screens", emboss=False)
-		
+
 
 		if self.panelProperties.expand_screens_panel:
 
@@ -86,9 +99,9 @@ class EsquissePanel(bpy.types.Panel):
 						# 	transparent_row.prop(obj.parent.esquisse, 'transparent', text="Transparent")
 						# 	if obj.parent.esquisse.transparent:
 						# 		transparent_row.prop(obj.parent.esquisse, 'transparency', text="transparency")
-						# 		transparent_row.prop(obj.parent.esquisse, 'make_visible_hidden_contours_transparent', text="Make visible the hidden contours")	
+						# 		transparent_row.prop(obj.parent.esquisse, 'make_visible_hidden_contours_transparent', text="Make visible the hidden contours")
 
-						
+
 						# Anchors
 						# has_anchors = False
 						# for child in obj.children:
@@ -114,7 +127,7 @@ class EsquissePanel(bpy.types.Panel):
 						# 			row.operator('esquisse.identify_object', icon = 'RESTRICT_SELECT_OFF', text="", emboss=False).obj_name = child.name
 						# 			op = row.operator('esquisse.remove_anchor', icon = 'X', text="", emboss=False).anchor_name = child.name
 
-		
+
 	def draw_anchors_panel(self, context):
 		anchors_box = self.layout.box()
 		header_row = anchors_box.row(True)
@@ -126,7 +139,7 @@ class EsquissePanel(bpy.types.Panel):
 
 		if self.panelProperties.expand_anchors_panel:
 
-			row = anchors_box.row(True)	
+			row = anchors_box.row(True)
 			row.operator('esquisse.add_anchor', text="New Anchor", icon="UNPINNED")
 
 
@@ -154,9 +167,9 @@ class EsquissePanel(bpy.types.Panel):
 		header_row.prop(self.panelProperties, "expand_hands_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_hands_panel else "RIGHTARROW", icon_only=True, emboss=False)
 		header_row.prop(self.panelProperties, "expand_hands_panel", icon="HAND", text="Hands", emboss=False)
 
-		
+
 		if self.panelProperties.expand_hands_panel:
-			
+
 			for obj in bpy.context.scene.objects:
 				if obj.esquisse.isHand:
 					hand_box = hands_box.box()
@@ -182,17 +195,17 @@ class EsquissePanel(bpy.types.Panel):
 						hand_operators_row.operator('esquisse.reset_pose_operator', text="Reset Pose", icon="MOD_ARMATURE").obj_name = obj.name
 						hand_operators_row.operator('esquisse.apply_constraints_to_pose', text="Apply Constraints", icon="CONSTRAINT_DATA").obj_name = obj.name
 
-	
-	
+
+
 	def draw_character_panel(self, context):
 		characters_box = self.layout.box()
 		header_row = characters_box.row(True)
 		header_row.alignment = 'LEFT'
 		header_row.prop(self.panelProperties, "expand_character_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_character_panel else "RIGHTARROW", icon_only=True, emboss=False)
 		header_row.prop(self.panelProperties, "expand_character_panel", icon="MOD_ARMATURE", text="Characters", emboss=False)
-		
+
 		if self.panelProperties.expand_character_panel:
-			
+
 			for obj in bpy.context.scene.objects:
 				if obj.esquisse.isCharacter:
 					character_box = characters_box.box()
@@ -248,7 +261,7 @@ class EsquissePanel(bpy.types.Panel):
 		header_row.prop(self.panelProperties, "expand_objects_color_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_objects_color_panel else "RIGHTARROW", icon_only=True, emboss=False)
 		header_row.prop(self.panelProperties, "expand_objects_color_panel", icon="COLOR", text="Colors", emboss=False)
 
-		if self.panelProperties.expand_objects_color_panel:	
+		if self.panelProperties.expand_objects_color_panel:
 			color_box.template_list("ObjectsColorList", "", context.scene, "objects", self.esquisse, "useless", rows = 3)
 
 
@@ -264,7 +277,7 @@ class EsquissePanel(bpy.types.Panel):
 			# Screens settings:
 			#screens_box = svg_box.box()
 			#screens_box.prop(self.esquisse, "render_screens", text="Render Screens")
-			
+
 
 			# Fills settings
 			#fills_box = svg_box.box()
@@ -324,7 +337,7 @@ class EsquissePanel(bpy.types.Panel):
 			# row.prop(context.scene.render,'resolution_x')
 			#row.prop(context.scene.render,'resolution_y')
 			row.prop(context.scene.esquisse, 'camera_aspect')
-			
+
 			if context.scene.camera:
 				row.label('Lens')
 				row.prop(context.scene.camera.data,'lens')
@@ -335,14 +348,37 @@ class EsquissePanel(bpy.types.Panel):
 			row = camera_box.row(True)
 			row.operator("view3d.camera_to_view", icon = 'OUTLINER_DATA_CAMERA', text= 'Move camera to view')
 			view3d = get_3d_view()
-			
+
 			if view3d and view3d.region_3d.view_perspective == 'CAMERA':
 				row.operator("view3d.viewnumpad", icon='SCENE', text="Scene View").type = 'CAMERA'
 			else:
 				row.operator("view3d.viewnumpad", icon='SCENE', text="Camera View").type = 'CAMERA'
 
+	#============================================
 
-	
+	def draw_collisions_panel(self, context):
+		# Collisions resolutions settings
+
+		collisions_box = self.layout.box()
+		header_row = collisions_box.row(True)
+		header_row.alignment = 'LEFT'
+		header_row.prop(self.panelProperties, "expand_collisions_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_collisions_panel else "RIGHTARROW", icon_only=True, emboss=False)
+		header_row.prop(self.panelProperties, "expand_collisions_panel", icon="MODIFIER", text="Collisions resolutions", emboss=False)
+
+		if self.panelProperties.expand_collisions_panel:
+
+			row = collisions_box.row(True)
+			row.operator("esquisse.collision_detection", icon='MODIFIER', text="Detect collisions")
+
+			row = collisions_box.row(True)
+			row.operator("esquisse.intersection_detection", icon='MODIFIER', text="Detect intersections")
+			row.operator("esquisse.remove_sphere", icon='MODIFIER', text="Remove collisions spheres")
+
+			row = collisions_box.row(True)
+			row.prop(self.esquisse, "direct_collision_enable", text="Direct collision checking")
+
+	#============================================
+
 	def draw_render_panel(self, context):
 		# Render settings
 		render_box = self.layout.box()
@@ -358,7 +394,7 @@ class EsquissePanel(bpy.types.Panel):
 			row = render_box.row(True)
 			row.operator("esquisse.renderstill", icon='RENDER_ANIMATION', text="Render Still Image")
 			row.operator("esquisse.renderghost", icon='RENDER_ANIMATION', text="Render Stroboscopic Image")
-	
+
 	def draw_ghost_panel(self, context):
 		# Ghost settings
 		ghost_box = self.layout.box()
@@ -378,7 +414,44 @@ class EsquissePanel(bpy.types.Panel):
 
 			row = ghost_box.row(True)
 			row.template_list("GhostScreenshotsList", "", self.esquisse, "ghost_screenshots_list", self.esquisse, "useless", rows = 3)
-			
+
+	def draw_gesture_panel(self, context):
+		gesture_box = self.layout.box()
+		header_row = gesture_box.row(True)
+		header_row.alignment = 'LEFT'
+		header_row.prop(self.panelProperties, "expand_gesture_panel", icon="DOWNARROW_HLT" if self.panelProperties.expand_gesture_panel else "RIGHTARROW", icon_only=True, emboss=False)
+		header_row.prop(self.panelProperties, "expand_gesture_panel", icon="DRIVER", text="Gesture Arrows", emboss=False)
+
+		if self.panelProperties.expand_gesture_panel:
+			glist_box = gesture_box.box()
+			## List of gestures
+			row = glist_box.row(True)
+			row.template_list("GestureList", "", self.esquisse, "gesture_list", self.esquisse, "gesture_selected", rows = 5)
+
+			## Gesture operations
+			col = row.column(True)
+			col.prop(self.esquisse, "gesture_auto_update", icon = "LINKED" if self.esquisse.gesture_auto_update else "UNLINKED", icon_only = True)
+			col.operator("esquisse.generate_gesture", text="", icon='ZOOMIN')#Generate gesture
+			col.operator("esquisse.delete_gesture", text="", icon='ZOOMOUT')#Delete gesture
+			col.menu("esquisse.gesture_auto_generate_menu", text="", icon='DOWNARROW_HLT')#Auto generate gestures
+
+			## Selected gesture's properties
+			row = glist_box.row(True)
+			if bpy.context.scene.esquisse.gesture_selected < len(bpy.context.scene.esquisse.gesture_list):
+				item = bpy.context.scene.esquisse.gesture_list[bpy.context.scene.esquisse.gesture_selected]
+				row.prop(item, "gesture_shape_type")
+				row = glist_box.row(True)
+				row.prop(item, "gesture_scale")
+				row = glist_box.row(True)
+				row.prop(item, "gesture_offset")
+				row = glist_box.row(True)
+				row.prop(item, "gesture_width")
+				row = glist_box.row(True)
+				if item.gesture_shape_type != "CYLINDER":
+					row.prop(item, "gesture_rotate")
+
+
+
 
 class EsquissePanelProperties(PropertyGroup):
 
@@ -390,6 +463,8 @@ class EsquissePanelProperties(PropertyGroup):
 	expand_objects_color_panel = BoolProperty(default = False)
 	expand_camera_panel = BoolProperty(default = True)
 	expand_ghost_panel = BoolProperty(default = True)
+	expand_gesture_panel = BoolProperty(default = True)
+	expand_collisions_panel = BoolProperty(default = True)
 	expand_render_panel = BoolProperty(default = True)
 	expand_anchors_panel = BoolProperty(default = True)
 
@@ -421,7 +496,7 @@ class ObjectsColorList(bpy.types.UIList):
 		cpt = 0
 		for obj in objects:
 			if not obj.type == 'MESH' or obj.esquisse.isAnchor or obj.esquisse.isGhost:
-				flt_flags[cpt] &= ~self.bitflag_filter_item 
+				flt_flags[cpt] &= ~self.bitflag_filter_item
 			cpt +=1
 
 		return flt_flags, flt_neworder
@@ -445,7 +520,29 @@ class GhostScreenshotsList(bpy.types.UIList):
 		op = layout.operator("esquisse.remove_ghost_screenshot", icon='X', text="", emboss = False)
 		op.screenshot_number = screenshot.number
 
+class GestureList(bpy.types.UIList):
 
+	VGROUP_EMPTY = 1 << 0
+
+	def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+		row = layout.row(True)
+		row.prop(item, "gesture_name", text = "", emboss = False)
+		## Gesture visible?
+		row.prop(item, "gesture_visibility", icon = "RESTRICT_VIEW_OFF" if item.gesture_visibility else "RESTRICT_VIEW_ON", icon_only=True, emboss = False)
+		## Gesture auto updating?
+		row.prop(item, "gesture_linkage", icon = "LINKED" if item.gesture_linkage else "UNLINKED", icon_only = True, emboss=False)
+
+
+class GestureAutoGenerateMenu(bpy.types.Menu):
+    bl_label = "Auto generation"
+    bl_idname = "esquisse.gesture_auto_generate_menu"
+
+    def draw(self, context):
+        layout = self.layout
+		## Generate gestures from anchors
+        layout.operator("esquisse.generate_gestures_anchors")
+		## Generate gestures from auto detected elements
+        layout.operator("esquisse.generate_gestures_auto")
 
 
 def area_of_type(type_name):
@@ -464,8 +561,3 @@ def register():
 
 def unregister():
 	del bpy.types.Scene.esquissePanelProperties
-
-
-
-
-

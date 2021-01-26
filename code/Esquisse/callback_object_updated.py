@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 from bpy.app.handlers import persistent
 
@@ -10,9 +21,9 @@ from .FunctionsUtils import *
 last_active_object_updated = None
 last_pos = Vector((0,0,0))
 
+#================================================
 
 def on_hand_update(hand):
-
 		
 	global last_active_object_updated
 	global last_pos
@@ -50,6 +61,7 @@ def on_hand_update(hand):
 	
 	last_pos = hand.matrix_world.to_translation()
 
+#================================================
 
 def on_anchor_update(anchor):
 
@@ -78,12 +90,12 @@ def on_anchor_update(anchor):
 		anchor.matrix_local = parent.matrix_world.inverted()* translation_matrix * rotation_matrix.to_4x4() 
 		#anchor.location = local_pos + delta_obj*local_normal
 
+#================================================
 
 @persistent
 def main_obj_updated(scene):
 	if bpy.context.scene.esquisse.is_rendering:
 		return
-
 
 	global last_active_object_updated
 
@@ -97,30 +109,21 @@ def main_obj_updated(scene):
 		# elif obj.esquisse.isAnchor:
 		# 	on_anchor_update(obj)
 
-
-
 	last_active_object_updated = obj
 
-
-
-
-
+#================================================
 
 def register():
 	bpy.app.handlers.scene_update_post.append(main_obj_updated)
+	bpy.app.handlers.scene_update_pre.append(before_update)
 
+#================================================
 
 def unregister():
-
 	bpy.app.handlers.scene_update_post.remove(main_obj_updated)
+	bpy.app.handlers.scene_update_pre.remove(before_update)
 
-
-
-
-
-
-
-
+#================================================
 
 
 

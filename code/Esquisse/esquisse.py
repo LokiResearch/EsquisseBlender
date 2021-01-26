@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 import re
 import os
@@ -6,6 +17,7 @@ from bpy.props import StringProperty, BoolProperty, IntProperty, FloatProperty, 
 from bpy.props import PointerProperty, FloatVectorProperty, CollectionProperty
 from bpy.types import Panel, Operator, AddonPreferences, PropertyGroup, BlendData, Object
 from .GhostProperties import *
+from .GestureProperties import *
 
 class Esquisse(PropertyGroup):
 
@@ -36,7 +48,7 @@ class Esquisse(PropertyGroup):
 		description = "Enable the rendering of external SVG screen interfaces in the SVG file"
 	)
 
-	
+
 	# Visible Strokes properties
 	render_visible_strokes = BoolProperty(
 		default = True,
@@ -51,8 +63,8 @@ class Esquisse(PropertyGroup):
 		min = 0,
 		max = 20
 	)
-	
-	visible_strokes_color = FloatVectorProperty(  
+
+	visible_strokes_color = FloatVectorProperty(
 		subtype='COLOR',
 		size = 4,
 		default=(0.0, 0.0, 0.0, 1.0),
@@ -95,7 +107,7 @@ class Esquisse(PropertyGroup):
 		description = "Enable the rendering of hidden strokes in the SVG file"
 	)
 
-	
+
 	hidden_strokes_width = IntProperty(
 		name = "Visible strokes thickness",
 		description="Set width for hidden strokes",
@@ -103,8 +115,8 @@ class Esquisse(PropertyGroup):
 		min = 0,
 		max = 20
 	)
-   
-	hidden_strokes_color = FloatVectorProperty(  
+
+	hidden_strokes_color = FloatVectorProperty(
 		name="strokes_color",
 		subtype='COLOR',
 		size = 4,
@@ -140,8 +152,31 @@ class Esquisse(PropertyGroup):
 		max = 10
 	)
 
+	###### COLLSION #######
 
+	def direct_collision_updated(self, context):
+		if self.direct_collision_enable:
+			print("ENABLE DIRECT COLLISION")
+		else:
+			print("DISABLE DIRECT COLLISION")
 
+	direct_collision_enable = BoolProperty(
+		default = False,
+		description = "Enable the direct collision checking",
+		update = direct_collision_updated
+	)
+
+	def check_collision_before_rendering_update(self, context):
+		if self.check_collision_before_rendering_enable:
+			print("ENABLE COLLISION BEFORE RENDERING")
+		else:
+			print("DISABLE COLLISION BEFORE RENDERING")
+
+	check_collision_before_rendering_enable = BoolProperty(
+		default = False,
+		description = "Enable the direct collision checking",
+		update = check_collision_before_rendering_update
+	)
 
 	###### GHOST #######
 
@@ -160,9 +195,38 @@ class Esquisse(PropertyGroup):
 
 	ease_blender_controls = BoolProperty(
 		name = "Ease blender controls",
-		description = "Active to simply the manipulation of armatures and parent-childs objects.",
+		description = "Active to simply the manipulation of armatures and parent-childs objects",
 		default = True,
 	)
+
+	###### Gesture #######
+
+	def select_gesture(self, context):
+		_mode = None
+		if bpy.context.object != None:
+			_mode = bpy.context.object.mode
+			if _mode != "OBJECT":
+				bpy.ops.object.mode_set(mode='OBJECT')
+		bpy.ops.object.select_all(action='DESELECT')
+		context.scene.objects.active = self.gesture_list[self.gesture_selected].gesture_path_object
+		self.gesture_list[self.gesture_selected].gesture_object.hide_select = False
+		self.gesture_list[self.gesture_selected].gesture_object.select = True
+		self.gesture_list[self.gesture_selected].gesture_object.hide_select = True
+		self.gesture_list[self.gesture_selected].gesture_path_object.select = True
+
+	gesture_auto_enable = BoolProperty(default = False)
+	gesture_select_type = EnumProperty(
+		items=[
+			('SELECT', 'Select', 'Select the wanted ones'),
+			('ANCHOR', 'Anchors', 'Use the anchors'),
+		],
+		name="Gestures selection type",
+		description="Choose how the gestures are selected",
+		default = 'ANCHOR'
+	)
+	gesture_list = CollectionProperty(type = Gesture, description="List of all the gestures")
+	gesture_selected = IntProperty(update = select_gesture, description="")
+	gesture_auto_update = BoolProperty(default = True, description="Automatically update the gestures")
 
 	###### CAMERA #######
 
@@ -196,12 +260,6 @@ class Esquisse(PropertyGroup):
 def register():
 	bpy.types.Scene.esquisse = PointerProperty(type=Esquisse)
 
- 
+
 def unregister():
 	del bpy.types.Scene.esquisse
-
-
-
-
-
-

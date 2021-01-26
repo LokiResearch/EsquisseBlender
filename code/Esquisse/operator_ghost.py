@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 from bpy_extras import view3d_utils
 import bgl
@@ -46,7 +57,7 @@ class EsquisseAddGhostScreenshotOperator(bpy.types.Operator):
 			for obj in context.scene.esquisse.ghost_save_group.objects:
 				context.scene.esquisse.ghost_save_group.objects.unlink(obj)
 				bpy.data.objects.remove(bpy.data.objects[obj.name],True)
-	
+
 		# Save the current state of each object in the scene:
 		save_group = bpy.data.groups.new("SaveGroup")
 		copies = copy_objects(context.scene, context.scene.objects, "Save_")
@@ -71,7 +82,7 @@ class EsquisseRemoveGhostScreenshot(bpy.types.Operator):
 
 	@classmethod
 	def poll(self, context):
-		return context.area.type == 'VIEW_3D' 
+		return context.area.type == 'VIEW_3D'
 
 	def execute(self, context):
 		print("Removing Ghost screenshot")
@@ -101,7 +112,7 @@ class EsquisseRemoveGhostScreenshot(bpy.types.Operator):
 					parent.hide_select = False
 					parent.select = True
 
-		bpy.ops.object.delete() 
+		bpy.ops.object.delete()
 
 		# Remove from data
 		for obj in screenshot.ghost_group.objects:
@@ -120,7 +131,7 @@ class EsquisseRemoveGhostScreenshot(bpy.types.Operator):
 
 		if self.screenshot_number == context.scene.esquisse.current_screenshot_number:
 			context.scene.esquisse.current_screenshot_number = -1
-	
+
 		return {'FINISHED'}
 
 
@@ -191,10 +202,10 @@ def applyPose(armature):
 		obj.select = False
 
 	old_active_obj = bpy.context.scene.objects.active
-	bpy.context.scene.objects.active = armature 
+	bpy.context.scene.objects.active = armature
 
 	# Go in pose mode :
-	bpy.ops.object.mode_set(mode='POSE') 
+	bpy.ops.object.mode_set(mode='POSE')
 
 	# Select all bones:
 	bpy.ops.pose.select_all(action='SELECT')
@@ -203,10 +214,10 @@ def applyPose(armature):
 	bpy.ops.pose.visual_transform_apply()
 
 	# Go back to object mode :
-	bpy.ops.object.mode_set(mode='OBJECT') 
+	bpy.ops.object.mode_set(mode='OBJECT')
 
 	old_active_obj.select = True
-	bpy.context.scene.objects.active = old_active_obj 
+	bpy.context.scene.objects.active = old_active_obj
 
 	return {'FINISHED'}
 
@@ -246,8 +257,8 @@ def copy_objects(scene, objects, prename):
 
 	# Duplicate each object in the scene
 	for obj in all_objects:
-		if obj.type in ['ARMATURE', 'MESH'] and not obj.esquisse.isGhost:
-			
+		if obj.type in ['ARMATURE', 'MESH'] and not (obj.esquisse.isGhost or obj.esquisse.isGesture):
+
 			copy = obj.copy()
 			#copy.data = obj.data.copy()
 
@@ -259,7 +270,7 @@ def copy_objects(scene, objects, prename):
 			new_objs_dictionnary[obj] = copy
 
 
-	
+
 	for obj in new_objs:
 		# ghost_screenshot.ghost_group.objects.link(obj)
 		obj.select = False
@@ -303,7 +314,7 @@ def object_moved(obj1, obj2):
 		for obj1_bone in obj1.pose.bones:
 			obj2_bone = obj2.pose.bones.get(obj1_bone.name)
 			for i in range(0,4):
-				for j in range(0,4):				
+				for j in range(0,4):
 					if abs(obj1_bone.matrix[i][j]-obj2_bone.matrix[i][j]) > delta:
 						return True
 	return False
@@ -313,7 +324,7 @@ def getChildren(obj):
 	objs = []
 	if len(obj.children)==0:
 		return objs
-	
+
 	for child in obj.children:
 		if not child.esquisse.isAnchor:
 			objs.append(child)
@@ -323,7 +334,7 @@ def getChildren(obj):
 
 def getParent(obj):
 	objs = []
-	
+
 	if obj.parent is not None:
 		objs.append(obj.parent)
 		objs+=getParent(obj.parent)
@@ -335,7 +346,7 @@ def getAnchors(scene, obj):
 	anchors = []
 	for o in scene.objects:
 		if o.esquisse.isAnchor and o.esquisse.anchor_properties.constrained_object == obj:
-			anchors.append(o) 
+			anchors.append(o)
 	return anchors
 
 
@@ -348,8 +359,3 @@ def register():
 def unregister():
 
 	bpy.app.handlers.scene_update_pre.remove(callback_ghost)
-
-
-
-
-

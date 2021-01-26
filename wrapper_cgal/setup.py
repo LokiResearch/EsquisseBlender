@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+# Author: Axel Antoine
+# https://axantoine.com
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 """
 setup.py file for SWIG example
 """

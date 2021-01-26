@@ -1,3 +1,14 @@
+# Author: Axel Antoine
+# https://axantoine.com
+# 01/26/2021
+
+# Loki, Inria project-team with Université de Lille
+# within the Joint Research Unit UMR 9189 CNRS-Centrale
+# Lille-Université de Lille, CRIStAL.
+# https://loki.lille.inria.fr
+
+# LICENCE: Licence.md
+
 import bpy
 import re
 import os
@@ -670,6 +681,7 @@ class EsquisseObjectProperties(PropertyGroup):
 
 	isSave = BoolProperty(default = False)
 	isGhost = BoolProperty(default = False)
+	isGesture = BoolProperty(default = False)
 	source_object = PointerProperty(type = bpy.types.Object)
 	ghost_source_object = PointerProperty(type = bpy.types.Object)
 	
