@@ -7,7 +7,7 @@
 
 ## About
 
-![](resources/Figure_teaser_en.pdf)
+![](resources/Figure_teaser_en.jpg)
 
 Esquisse is an add-on for the 3D modeling software Blender. 
 It provides an innovative 3D model staging workflow, with specific interaction techniques that facilitate 3D staging through kinematic manipulation, anchor points and posture tracking. 
