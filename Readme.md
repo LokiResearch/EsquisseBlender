@@ -41,7 +41,7 @@ Please refer to the wiki for a detailed tutorial on how to use Esquisse.
 [<img src="resources/esquisse_demo_add_scene.gif" width="45%"/>]()
 [<img src="resources/esquisse_demo_add_object.gif" width="45%"/>]()
 
-##### Move an object using the default Blender controls or the leap motion
+##### Move an object using the default Blender controls or the Leap Motion
 
 [<img src="resources/esquisse_demo_move_objects.gif" width="45%"/>]()
 [<img src="resources/esquisse_demo_leap.gif" width="45%"/>]()
@@ -51,7 +51,7 @@ Please refer to the wiki for a detailed tutorial on how to use Esquisse.
 [<img src="resources/esquisse_demo_sliders_hand.gif" width="45%"/>]()
 [<img src="resources/esquisse_demo_sliders_avatar.gif" width="45%"/>]()
 
-##### Use the anchor system to modify postures | Embed 2D SVG interfaces on screen objets
+##### Use the anchor system to modify postures | Embed 2D SVG interfaces on screen objects
 
 [<img src="resources/esquisse_demo_anchors.gif" width="45%"/>]()
 [<img src="resources/esquisse_demo_interface.gif" width="45%"/>]()
